@@ -1,8 +1,16 @@
 -- ============================================
--- SQL PORTFOLIO: JOINS
+-- SQL PORTFOLIO: JOINS (MySQL Version)
 -- ============================================
 
--- Drop tables if they exist
+-- Create and use database
+CREATE DATABASE IF NOT EXISTS sql_portfolio;
+USE sql_portfolio;
+
+-- ============================================
+-- DROP TABLES (order matters because of FK)
+-- ============================================
+
+DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS departments;
 
@@ -43,7 +51,7 @@ INSERT INTO employees VALUES
 (6, 'Neha', 29, 55000, 3),
 (7, 'Ajay', 27, 48000, 1),
 (8, 'Divya', 31, 62000, 4),
-(9, 'Ravi', 24, 35000, NULL);  -- No department
+(9, 'Ravi', 24, 35000, NULL);
 
 -- ============================================
 -- INNER JOIN
@@ -79,7 +87,7 @@ ON e.department_id = d.department_id
 WHERE d.department_id IS NULL;
 
 -- ============================================
--- RIGHT JOIN (may not work in SQLite)
+-- RIGHT JOIN (SUPPORTED IN MYSQL)
 -- ============================================
 
 -- Problem 5: Show all departments and employees
@@ -89,10 +97,10 @@ RIGHT JOIN departments d
 ON e.department_id = d.department_id;
 
 -- ============================================
--- FULL OUTER JOIN (MySQL doesn't support directly)
+-- FULL OUTER JOIN (SIMULATED IN MYSQL)
 -- ============================================
 
--- Problem 6: Simulate FULL OUTER JOIN using UNION
+-- Problem 6: Simulate FULL OUTER JOIN
 SELECT e.name, d.department_name
 FROM employees e
 LEFT JOIN departments d
@@ -138,13 +146,11 @@ GROUP BY d.department_name;
 -- MULTIPLE JOINS (ADVANCED)
 -- ============================================
 
--- Create another table
-DROP TABLE IF EXISTS projects;
-
 CREATE TABLE projects (
     project_id INT PRIMARY KEY,
     project_name VARCHAR(50),
-    employee_id INT
+    employee_id INT,
+    FOREIGN KEY (employee_id) REFERENCES employees(id)
 );
 
 INSERT INTO projects VALUES
