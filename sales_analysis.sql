@@ -1,11 +1,18 @@
 -- ============================================
--- SQL MINI PROJECT: SALES ANALYSIS
+-- SQL MINI PROJECT: SALES ANALYSIS (MySQL)
 -- ============================================
 
--- Drop tables if exist
+-- Create and use database
+CREATE DATABASE IF NOT EXISTS sql_portfolio;
+USE sql_portfolio;
+
+-- ============================================
+-- DROP TABLES (FK order safe)
+-- ============================================
+
+DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS orders;
 
 -- ============================================
 -- CREATE TABLES
@@ -124,7 +131,7 @@ FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 JOIN products p ON o.product_id = p.product_id;
 
--- Problem 9: Find customers who never ordered (if any)
+-- Problem 9: Customers who never ordered
 SELECT c.customer_name
 FROM customers c
 LEFT JOIN orders o ON c.customer_id = o.customer_id
@@ -138,12 +145,12 @@ JOIN products p ON o.product_id = p.product_id
 GROUP BY p.product_name
 ORDER BY revenue DESC;
 
--- Problem 11: Monthly revenue (basic grouping)
-SELECT strftime('%Y-%m', order_date) AS month,
+-- Problem 11: Monthly revenue (MySQL FIXED)
+SELECT DATE_FORMAT(order_date, '%Y-%m') AS month,
        SUM(p.price * o.quantity) AS revenue
 FROM orders o
 JOIN products p ON o.product_id = p.product_id
-GROUP BY month;
+GROUP BY DATE_FORMAT(order_date, '%Y-%m');
 
 -- Problem 12: Categorize customers by spending
 SELECT c.customer_name,
